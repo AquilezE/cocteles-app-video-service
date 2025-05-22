@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option java_package = "com.proto.audio";
+
+message DownloadVideoRequest {
+  string name = 1;
+}
+
+message DataChunkResponse {
+  oneof request {
+    bytes data = 1;
+    string name = 2;
+  }
+}
+
+service VideoService {
+  rpc downloadVideo (DownloadVideoRequest) returns (stream DataChunkResponse);
+
+  rpc uploadVideo (stream DataChunkResponse) returns (DownloadVideoRequest);
+}

@@ -1,0 +1,75 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.google.protobuf' version '0.9.4'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    grpcVersion     = '1.62.2'
+    protobufVersion = '3.25.1'
+    jjwtVersion     = '0.11.5'
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:${protobufVersion}"
+    }
+    plugins {
+        grpc {
+            artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
+        }
+    }
+    generateProtoTasks {
+        all().each { task ->
+            task.plugins {
+                grpc {}
+            }
+        }
+    }
+}
+
+dependencies {
+    // gRPC
+    implementation "io.grpc:grpc-netty-shaded:${grpcVersion}"
+    implementation "io.grpc:grpc-protobuf:${grpcVersion}"
+    implementation "io.grpc:grpc-stub:${grpcVersion}"
+    implementation "io.grpc:grpc-services:${grpcVersion}"
+
+    // JSON Web Tokens
+    implementation "io.jsonwebtoken:jjwt-api:${jjwtVersion}"
+    runtimeOnly   "io.jsonwebtoken:jjwt-impl:${jjwtVersion}"
+    runtimeOnly   "io.jsonwebtoken:jjwt-jackson:${jjwtVersion}"  // for JSON parsing
+
+    // Annotations (optional; only if you use @WebListener etc.)
+    compileOnly 'org.apache.tomcat:annotations-api:6.0.53'
+
+    // Test
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
+}
+
+application {
+    // change this to the fully-qualified class name of your main
+    mainClass = 'videoservice.ServerVideos'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+// Optional: build a fat-jar with all dependencies
+shadowJar {
+    archiveBaseName.set('grpc-video-service')
+    archiveClassifier.set('')
+    archiveVersion.set(version)
+}
+
+run {
+    // pick up the host’s JWT_SECRET, or fall back to a dev default
+    environment "JWT_SECRET", System.getenv("JWT_SECRET") ?: "default-dev-secret"
+}
