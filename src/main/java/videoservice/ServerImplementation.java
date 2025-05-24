@@ -22,8 +22,7 @@ public class ServerImplementation extends VideoServiceImplBase {
         String videoName = request.getName();
         System.out.println("\n\nSending Video: " + videoName);
 
-        Path videoPath = Paths.get("src/main/resources/uploads/", videoName).toAbsolutePath();
-
+        Path videoPath = Paths.get("/app/resources/uploads", videoName);
         System.out.println("Video path: " + videoPath);
 
         if (!Files.exists(videoPath)) {
@@ -73,7 +72,7 @@ public class ServerImplementation extends VideoServiceImplBase {
                     if (request.hasName()) {
                         videoName = request.getName();
                         System.out.println("\nReceiving the file: " + videoName);
-                        Path videoPath = Paths.get("app/src/main/resources/uploads/" + videoName).toAbsolutePath();
+                        Path videoPath = Paths.get("/app/resources/uploads", videoName);
                         writer = Files.newOutputStream(videoPath, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
                     } else if (request.hasData()) {
                         writer.write(request.getData().toByteArray());
