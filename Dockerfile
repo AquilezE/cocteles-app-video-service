@@ -6,6 +6,9 @@ ENTRYPOINT ["top", "-b"]
 FROM openjdk:17-jdk-slim AS build
 WORKDIR /app
 
+ARG JWT_SECRET
+ENV JWT_SECRET=$JWT_SECRET
+
 COPY build.gradle settings.gradle gradlew /app/
 COPY gradle /app/gradle
 

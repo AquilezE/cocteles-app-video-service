@@ -30,6 +30,8 @@ jobs:
       - name: Build and push gRPC image
         uses: docker/build-push-action@v5
         with:
+          build-args: |
+            JWT_SECRET=${{ secrets.JWT_SECRET}}
           context: .
           file: ./Dockerfile
           push: true
