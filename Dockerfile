@@ -33,7 +33,7 @@ RUN mkdir -p /app/resources/uploads
 VOLUME ["/app/resources/uploads"]
 
 # expose the gRPC port
-EXPOSE 8080
+EXPOSE 50051
 
 # finally, start your server
 CMD ["java","-jar","grpc-video-service.jar"]

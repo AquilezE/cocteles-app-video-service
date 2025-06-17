@@ -12,7 +12,7 @@ public class ServerVideos {
 
 
 
-        int port = 8080;
+        int port = 50051;
 
         try {
 
