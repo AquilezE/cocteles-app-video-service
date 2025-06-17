@@ -6,8 +6,6 @@ ENTRYPOINT ["top", "-b"]
 FROM openjdk:17-jdk-slim AS build
 WORKDIR /app
 
-ARG JWT_SECRET
-ENV JWT_SECRET=$JWT_SECRET
 
 COPY build.gradle settings.gradle gradlew /app/
 COPY gradle /app/gradle
@@ -19,6 +17,9 @@ RUN ./gradlew shadowJar --no-daemon
 
 FROM openjdk:17-slim
 WORKDIR /app
+
+ARG JWT_SECRET
+ENV JWT_SECRET=$JWT_SECRET
 
 COPY --from=build /app/build/libs/*.jar ./grpc-video-service.jar
 
