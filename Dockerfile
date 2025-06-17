@@ -29,4 +29,5 @@ VOLUME ["/app/resources/uploads"]
 
 EXPOSE 50051
 
-CMD ["sh", "-c", "echo JWT_SECRET=$JWT_SECRET && ls -l /app && sleep 3600"]
+
+CMD ["java","-jar","/app/grpc-video-service.jar"]
